@@ -16,7 +16,7 @@ export const eventMonitoring = {
     const dist = `${build}-${Platform.OS}`;
 
     SentryModule.init({
-      dsn: 'https://1c501b6cc9b3401887da3bd10c3935e3@sentry.ehp.internal-passculture.app/9',
+      dsn: 'https://2f6eedb3c6de41799bf9f03a658cfa53@o1145507.ingest.sentry.io/6212953',
       environment: 'testing',
       release,
       dist,
