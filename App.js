@@ -1,14 +1,7 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
+import React, {useEffect} from 'react';
 import {
+  TouchableOpacity,
+  Alert,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -26,8 +19,11 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
+import {eventMonitoring} from './src/libs/eventMonitoring';
+
+const Section = ({children, title}) => {
   const isDarkMode = useColorScheme() === 'dark';
+
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -52,11 +48,23 @@ const Section = ({children, title}): Node => {
   );
 };
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  };
+
+  useEffect(() => {
+    eventMonitoring.init();
+  }, []);
+
+  const onPressError = () => {
+    const message = `SENTRY_TESTING_TEST_${Math.random()
+      .toString(36)
+      .slice(2, 7)}`.toUpperCase();
+    eventMonitoring.captureException(new Error(message));
+    Alert.alert(`L'erreur ${message} a été envoyé sur Sentry`);
   };
 
   return (
@@ -70,6 +78,12 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Section title="Sentry test error">
+            Generate an error by clicking on the bellow button
+          </Section>
+          <TouchableOpacity onPress={onPressError} style={styles.button}>
+            <Text style={styles.buttonText}>Sentry</Text>
+          </TouchableOpacity>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.js</Text> to change this
             screen and then come back to see your edits.
@@ -105,6 +119,17 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   highlight: {
+    fontWeight: '700',
+  },
+  button: {
+    backgroundColor: 'red',
+    borderRadius: 40,
+    margin: 10,
+    padding: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
     fontWeight: '700',
   },
 });
