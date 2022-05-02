@@ -4,7 +4,7 @@
   "build": 1000000,
   "private": true,
   "scripts": {
-    "apk:build": "rm -rf android/app/build && ./android/gradlew -p android assemble",
+    "apk:build": "rm -rf android/app/build && ./android/gradlew -p android assembleRelease",
     "apk:install": "adb install android/app/build/outputs/apk/release/app-release.apk",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
